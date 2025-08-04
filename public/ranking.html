@@ -238,22 +238,20 @@
         return response.json();
       })
       .then(data => {
-        const tbody = document.querySelector('#ranking-table tbody');
-        tbody.innerHTML = '';
+      const tbody = document.querySelector('#ranking-table tbody');
+      tbody.innerHTML = '';
 
-        const rankingArray = Object.entries(data).map(([pedido, qtd_videos]) => ({
-          nome: pedido,
-          qtd_videos: qtd_videos,
-          link: `https://arquivos.estacionadireito.com.br/${pedido}`
-        }));
+      // Garante que qtd_videos seja número e ordena
+      const rankingArray = data.map(item => ({
+        nome: item.nome,
+        qtd_videos: Number(item.qtd_videos) || 0
+      })).sort((a, b) => b.qtd_videos - a.qtd_videos);
 
-        rankingArray.sort((a, b) => b.qtd_videos - a.qtd_videos);
-
-        rankingArray.forEach((item, index) => {
-          const tr = document.createElement('tr');
-          if (index === 0) tr.classList.add('top-1');
-          if (index === 1) tr.classList.add('top-2');
-          if (index === 2) tr.classList.add('top-3');
+      rankingArray.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        if (index === 0) tr.classList.add('top-1');
+        if (index === 1) tr.classList.add('top-2');
+        if (index === 2) tr.classList.add('top-3');
 
           const tdPos = document.createElement('td');
           tdPos.classList.add('position-cell');
