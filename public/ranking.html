@@ -31,11 +31,13 @@
     }
 
     header img {
-      max-width: 180px;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-      transition: transform 0.3s ease;
-    }
+  max-width: 180px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  transition: transform 0.3s ease;
+}
 
     header img:hover {
       transform: scale(1.05);
@@ -205,12 +207,14 @@
 </head>
 <body>
   <div class="container">
-    <>
+  <header>
+    <a href="https://www.estacionadireito.com.br/" target="_blank" rel="noopener noreferrer">
       <img src="https://acdn-us.mitiendanube.com/stores/005/435/647/themes/common/logo-877149390-1730953694-a302bbadf225f9c383354ad81b8aa0551730953695-640-0.webp" alt="EstacionaDireito Logo">
-      <h1>Ranking de Vídeos</h1>
-      <p class="subtitle">Competição de Vídeos - Melhores Colocações</p>
-    </header>
-
+    </a>
+    <h1>Ranking de Vídeos</h1>
+    <p class="subtitle">Competição de Vídeos - Melhores Colocações</p>
+  </header>
+    
     <div class="table-container">
       <table id="ranking-table">
         <thead>
