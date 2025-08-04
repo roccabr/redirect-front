@@ -302,77 +302,73 @@
         return response.json();
       })
       .then(data => {
-        const tbody = document.querySelector('#ranking-table tbody');
-        tbody.innerHTML = '';
+  const tbody = document.querySelector('#ranking-table tbody');
+  tbody.innerHTML = '';
 
-        // Ordena por quantidade de vídeos (decrescente)
-        data.sort((a, b) => b.qtd_videos - a.qtd_videos);
+  // TRANSFORMA: objeto → array de objetos
+  const rankingArray = Object.entries(data).map(([pedido, qtd_videos]) => ({
+    nome: pedido,
+    qtd_videos,
+    link: `https://arquivos.estacionadireito.com.br/${pedido}`
+  }));
 
-        data.forEach((item, index) => {
-          const tr = document.createElement('tr');
+  // Ordena
+  rankingArray.sort((a, b) => b.qtd_videos - a.qtd_videos);
 
-          // Aplica classes especiais para os top 3
-          if (index === 0) {
-            tr.classList.add('top-1');
-          } else if (index === 1) {
-            tr.classList.add('top-2');
-          } else if (index === 2) {
-            tr.classList.add('top-3');
-          }
+  rankingArray.forEach((item, index) => {
+    const tr = document.createElement('tr');
 
-          // Coluna posição
-          const tdPos = document.createElement('td');
-          tdPos.classList.add('position-cell');
-          tdPos.textContent = index + 1;
+    if (index === 0) tr.classList.add('top-1');
+    if (index === 1) tr.classList.add('top-2');
+    if (index === 2) tr.classList.add('top-3');
 
-          // Coluna nome
-          const tdNome = document.createElement('td');
-          tdNome.classList.add('name-cell');
-          tdNome.innerHTML = item.nome;
+    const tdPos = document.createElement('td');
+    tdPos.classList.add('position-cell');
+    tdPos.textContent = index + 1;
 
-          // Coluna quantidade de vídeos
-          const tdQtd = document.createElement('td');
-          tdQtd.classList.add('videos-cell');
-          tdQtd.textContent = item.qtd_videos;
+    const tdNome = document.createElement('td');
+    tdNome.classList.add('name-cell');
+    tdNome.textContent = item.nome;
 
-          // Coluna link
-          const tdLink = document.createElement('td');
-          tdLink.classList.add('link-cell');
-          const a = document.createElement('a');
-          a.href = item.link;
-          a.classList.add('link-btn');
-          a.textContent = 'Visualizar';
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          tdLink.appendChild(a);
+    const tdQtd = document.createElement('td');
+    tdQtd.classList.add('videos-cell');
+    tdQtd.textContent = item.qtd_videos;
 
-          tr.appendChild(tdPos);
-          tr.appendChild(tdNome);
-          tr.appendChild(tdQtd);
-          tr.appendChild(tdLink);
+    const tdLink = document.createElement('td');
+    tdLink.classList.add('link-cell');
+    const a = document.createElement('a');
+    a.href = item.link;
+    a.classList.add('link-btn');
+    a.textContent = 'Visualizar';
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    tdLink.appendChild(a);
 
-          tbody.appendChild(tr);
+    tr.appendChild(tdPos);
+    tr.appendChild(tdNome);
+    tr.appendChild(tdQtd);
+    tr.appendChild(tdLink);
+    tbody.appendChild(tr);
 
-          // Adiciona linha de prêmio para os top 3
-          if (index < 3) {
-            const premio = document.createElement('tr');
-            premio.classList.add(`top-\${index + 1}`);
-            const tdPremio = document.createElement('td');
-            tdPremio.colSpan = 4;
-            tdPremio.classList.add('premio');
+    if (index < 3) {
+      const premio = document.createElement('tr');
+      premio.classList.add(`top-${index + 1}`);
+      const tdPremio = document.createElement('td');
+      tdPremio.colSpan = 4;
+      tdPremio.classList.add('premio');
 
-            const premios = [
-              '🏆 1º Lugar: R\$ 200,00 ou 360 adesivos',
-              '🥈 2º Lugar: R\$ 100,00 ou 240 adesivos',
-              '🥉 3º Lugar: R\$ 50,00 ou 120 adesivos'
-            ];
+      const premios = [
+        '🏆 1º Lugar: R$ 200,00 ou 360 adesivos',
+        '🥈 2º Lugar: R$ 100,00 ou 240 adesivos',
+        '🥉 3º Lugar: R$ 50,00 ou 120 adesivos'
+      ];
 
-            tdPremio.innerHTML = `<span class="trophy-icon">${['🏆', '🥈', '🥉'][index]}</span>${premios[index]}`;
-            premio.appendChild(tdPremio);
-            tbody.appendChild(premio);
-          }
-        });
-      })
+      tdPremio.innerHTML = `<span class="trophy-icon">${['🏆', '🥈', '🥉'][index]}</span>${premios[index]}`;
+      premio.appendChild(tdPremio);
+      tbody.appendChild(premio);
+    }
+  });
+})
       .catch(error => {
         const tbody = document.querySelector('#ranking-table tbody');
         tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #ff4444; padding: 2rem;">Erro ao carregar os dados do ranking</td></tr>';
