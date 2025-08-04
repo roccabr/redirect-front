@@ -31,7 +31,7 @@
     }
 
     header img {
-  max-width: 180px;
+  max-width: 100px;
   width: 100%;
   height: auto;
   margin-bottom: 1.5rem;
@@ -203,17 +203,74 @@
       40% { transform: translateY(-10px); }
       60% { transform: translateY(-5px); }
     }
+    .accordion {
+        background-color: #222;
+        color: #FBB034;
+        cursor: pointer;
+        padding: 1rem;
+        width: 100%;
+        text-align: left;
+        border: 1px solid #444;
+        outline: none;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+        margin-bottom: 0.5rem;
+        }
+
+    .accordion:hover {
+        background-color: #333;
+        }
+
+    .panel {
+        background-color: #111;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        border-left: 3px solid #FBB034;
+        border-radius: 4px;
+        }
   </style>
-</head>
-<body>
-  <div class="container">
-  <header>
-    <a href="https://www.estacionadireito.com.br/" target="_blank" rel="noopener noreferrer">
-      <img src="https://acdn-us.mitiendanube.com/stores/005/435/647/themes/common/logo-877149390-1730953694-a302bbadf225f9c383354ad81b8aa0551730953695-640-0.webp" alt="EstacionaDireito Logo">
-    </a>
-    <h1>Ranking de Vídeos</h1>
-    <p class="subtitle">Competição de Vídeos - Agosto 2025 - Válido até 31/08/2025</p>
-  </header>
+<header>
+  <a href="https://www.estacionadireito.com.br/" target="_blank" rel="noopener noreferrer">
+    <img src="https://acdn-us.mitiendanube.com/stores/005/435/647/themes/common/logo-877149390-1730953694-a302bbadf225f9c383354ad81b8aa0551730953695-640-0.webp" alt="EstacionaDireito Logo">
+  </a>
+  <h1>Ranking de Vídeos</h1>
+  <p class="subtitle">Competição de Vídeos - Agosto 2025 - Válido até 31/08/2025</p>
+
+  <!-- NOVA SEÇÃO: Como participar e Regras (Acordeões) -->
+  <div class="accordion-section" style="margin-top: 2rem; text-align: left;">
+    <button class="accordion" onclick="toggleAccordion('como')">📢 Como fazer para participar?</button>
+    <div id="como" class="panel" style="display: none;">
+      <p>
+        Basta fazer um pedido no nosso site → 
+        <a href="https://estacionadireito.com.br" target="_blank" style="color: #FBB034;">Fazer Pedido</a><br><br>
+        Após fazer seu pedido, você receberá um <strong>código do seu pedido</strong>!<br>
+        Com esse código, basta inserir aqui:
+      </p>
+      <form id="pedidoForm" onsubmit="redirecionarPedido(event)" style="margin-top: 1rem;">
+        <input 
+          type="text" 
+          id="codigoPedido" 
+          placeholder="Digite seu código aqui..." 
+          style="padding: 0.5rem; width: 100%; max-width: 300px; margin-bottom: 1rem;"
+          required
+          value="0000"
+        />
+        <br>
+        <button type="submit" style="padding: 0.5rem 1rem; background: #FBB034; border: none; border-radius: 4px; cursor: pointer;">Enviar</button>
+      </form>
+    </div>
+
+    <button class="accordion" onclick="toggleAccordion('regras')">📌 Regras</button>
+    <div id="regras" class="panel" style="display: none;">
+      <ul>
+        <li>Esse ranking é apenas para conferência. Após o prazo, haverá uma validação dos vídeos.</li>
+        <li>Vídeo repetido ou com o mesmo carro estacionado no mesmo local será contado como 1 vídeo.</li>
+      </ul>
+    </div>
+  </div>
+</header>
     
     <div class="table-container">
       <table id="ranking-table">
@@ -299,5 +356,20 @@
         console.error('Erro ao carregar ranking:', error);
       });
   </script>
+  <script>
+  function redirecionarPedido(event) {
+    event.preventDefault();
+    const codigo = document.getElementById('codigoPedido').value.trim();
+    if (codigo) {
+      const url = `https://arquivos.estacionadireito.com.br/pedido-${codigo}`;
+      window.open(url, '_blank');
+    }
+  }
+
+  function toggleAccordion(id) {
+    const panel = document.getElementById(id);
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
 </body>
 </html>
