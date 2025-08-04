@@ -3,80 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ranking de Vídeos por Pasta</title>
+  <title>Ranking Simples</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       padding: 2rem;
-      background-color: #f8f9fa;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: white;
     }
     th, td {
-      padding: 1rem;
-      border: 1px solid #ddd;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
       text-align: left;
     }
     th {
-      background-color: #007BFF;
-      color: white;
-    }
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-    a {
-      color: #007BFF;
-      text-decoration: none;
+      background-color: #eee;
     }
   </style>
 </head>
 <body>
-  <h1>Ranking de Pastas com Mais Vídeos</h1>
-  <table id="ranking">
+  <h1>Ranking de Pedidos</h1>
+  <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>Pasta</th>
-        <th>Quantidade de Vídeos</th>
-        <th>Link</th>
+        <th>Pedido</th>
+        <th>Qtd de vídeos</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="ranking"></tbody>
   </table>
 
   <script>
-    fetch('https://arquivos.estacionadireito.com.br/api/ranking')
+    fetch("https://arquivos.estacionadireito.com.br/api/ranking")
       .then(response => response.json())
       .then(data => {
-        const tbody = document.querySelector("#ranking tbody");
-        let index = 1;
-
-        // Converte o objeto em array e ordena pela quantidade de vídeos (decrescente)
-        const sorted = Object.entries(data)
-          .sort(([, a], [, b]) => b - a);
-
-        sorted.forEach(([pedido, qtd_videos]) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${index++}</td>
-            <td>${pedido}</td>
-            <td>${qtd_videos}</td>
-            <td><a href="/${pedido}" target="_blank">Acessar</a></td>
-          `;
-          tbody.appendChild(tr);
+        const tbody = document.getElementById("ranking");
+        const sorted = Object.entries(data).sort(([, a], [, b]) => b - a);
+        sorted.forEach(([pedido, qtd]) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${pedido}</td><td>${qtd}</td>`;
+          tbody.appendChild(row);
         });
       })
-      .catch(error => {
-        document.body.innerHTML = '<p>Erro ao carregar ranking. Tente novamente mais tarde.</p>';
-        console.error(error);
+      .catch(err => {
+        document.body.innerHTML = "<p>Erro ao carregar os dados.</p>";
+        console.error(err);
       });
   </script>
 </body>
