@@ -8,167 +8,294 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: 'Roboto', sans-serif;
-      background: #111;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
       color: #fff;
-      margin: 0;
-      padding: 2rem;
+      min-height: 100vh;
+      padding: 1rem;
     }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
     }
+
     header img {
-      width: 150px;
-      margin-bottom: 1rem;
+      max-width: 180px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      transition: transform 0.3s ease;
     }
-    h1 {
+
+    header img:hover {
+      transform: scale(1.05);
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      margin: 0;
       color: #FBB034;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      letter-spacing: 1px;
     }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+      font-weight: 300;
+    }
+
     .table-container {
-      background: #222;
-      border-radius: 12px;
+      background: rgba(28, 28, 28, 0.9);
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
     }
+
     th, td {
-      padding: 1rem;
+      padding: 1.2rem 1rem;
       text-align: left;
-      border-bottom: 1px solid #444;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
+
     th {
-      background: #ED1C24;
-      color: white;
+      background: linear-gradient(135deg, #ED1C24 0%, #c41e3a 100%);
+      color: #fff;
+      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
+
+    th.videos-cell {
+      color: #fff !important;
+    }
+
+    tbody tr {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(251, 176, 52, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(251, 176, 52, 0.2);
+    }
+
     .position-cell {
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 60px;
       text-align: center;
-      font-weight: bold;
     }
+
+    .name-cell {
+      font-weight: 500;
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+
     .videos-cell {
-      color: #FBB034;
-      font-weight: bold;
+      font-weight: 600;
+      color: #000 !important;
       text-align: center;
+      font-size: 1.1rem;
     }
+
     .top-1 {
-      background: linear-gradient(to right, gold, #f4d03f);
-      color: black;
+      background: linear-gradient(135deg, #FBB034 0%, #f4a425 100%);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(251, 176, 52, 0.3);
     }
+
     .top-2 {
-      background: linear-gradient(to right, silver, #c0c0c0);
-      color: black;
+      background: linear-gradient(135deg, #C0C0C0 0%, #a8a8a8 100%);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
     }
+
     .top-3 {
-      background: linear-gradient(to right, #cd7f32, #b87333);
-      color: black;
+      background: linear-gradient(135deg, #CD7F32 0%, #b8722c 100%);
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0 0 20px rgba(205, 127, 50, 0.3);
     }
+
     .premio {
-      font-style: italic;
+      background: #f0f0f0 !important;
+      color: #000 !important;
+      font-weight: 500;
       text-align: center;
       padding: 0.8rem;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      font-style: italic;
+      border-bottom: 1px solid #ddd;
     }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #FBB034;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     #erro {
       color: #ff4444;
       margin-top: 2rem;
       text-align: center;
+      font-size: 1.1rem;
+      padding: 1rem;
+      background: rgba(255, 68, 68, 0.1);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 68, 68, 0.3);
+    }
+
+    .trophy-icon {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      display: inline-block;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://arquivos.estacionadireito.com.br/logo.png" alt="Logo EstacionaDireito" />
-    <h1>Ranking de Pedidos</h1>
-    <p>Competição de vídeos – top 3 ganham prêmios!</p>
-  </header>
+  <div class="container">
+    <header>
+      <img src="https://arquivos.estacionadireito.com.br/logo.png" alt="EstacionaDireito Logo">
+      <h1>Ranking de Pedidos</h1>
+      <p class="subtitle">Competição de Vídeos - Melhores Colocações</p>
+    </header>
 
-  <div class="table-container">
-    <table id="ranking-table">
-      <thead>
-        <tr>
-          <th class="position-cell">#</th>
-          <th>Pedido</th>
-          <th class="videos-cell">Qtd. Vídeos</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td colspan="3" style="text-align:center;">Carregando dados...</td></tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table id="ranking-table">
+        <thead>
+          <tr>
+            <th class="position-cell">#</th>
+            <th class="name-cell">Pedido</th>
+            <th class="videos-cell">QTD. VÍDEOS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3" class="loading">Carregando dados do ranking</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p id="erro"></p>
   </div>
 
-  <p id="erro"></p>
+  <script>
+    fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
+      .then(response => {
+        if (!response.ok) throw new Error('Erro na resposta da API');
+        return response.json();
+      })
+      .then(data => {
+        const tbody = document.querySelector('#ranking-table tbody');
+        tbody.innerHTML = '';
 
- <script>
-  fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
-    .then(response => {
-      if (!response.ok) throw new Error('Erro na resposta da API');
-      return response.json();
-    })
-    .then(data => {
-      const tbody = document.querySelector('#ranking-table tbody');
-      tbody.innerHTML = '';
+        const rankingArray = Object.entries(data).map(([pedido, qtd_videos]) => ({
+          nome: pedido,
+          qtd_videos: qtd_videos,
+          link: `https://arquivos.estacionadireito.com.br/${pedido}`
+        }));
 
-      // Garante que qtd_videos seja número e ordena
-      const rankingArray = data.map(item => ({
-        nome: item.nome,
-        qtd_videos: Number(item.qtd_videos) || 0
-      })).sort((a, b) => b.qtd_videos - a.qtd_videos);
+        rankingArray.sort((a, b) => b.qtd_videos - a.qtd_videos);
 
-      rankingArray.forEach((item, index) => {
-        const tr = document.createElement('tr');
-        if (index === 0) tr.classList.add('top-1');
-        if (index === 1) tr.classList.add('top-2');
-        if (index === 2) tr.classList.add('top-3');
+        rankingArray.forEach((item, index) => {
+          const tr = document.createElement('tr');
+          if (index === 0) tr.classList.add('top-1');
+          if (index === 1) tr.classList.add('top-2');
+          if (index === 2) tr.classList.add('top-3');
 
-        const tdPos = document.createElement('td');
-        tdPos.classList.add('position-cell');
-        tdPos.textContent = index + 1;
+          const tdPos = document.createElement('td');
+          tdPos.classList.add('position-cell');
+          tdPos.textContent = index + 1;
 
-        const tdNome = document.createElement('td');
-        tdNome.classList.add('name-cell');
-        tdNome.textContent = item.nome;
+          const tdNome = document.createElement('td');
+          tdNome.classList.add('name-cell');
+          tdNome.textContent = item.nome;
 
-        const tdQtd = document.createElement('td');
-        tdQtd.classList.add('videos-cell');
-        tdQtd.textContent = item.qtd_videos;
+          const tdQtd = document.createElement('td');
+          tdQtd.classList.add('videos-cell');
+          tdQtd.textContent = item.qtd_videos;
 
-        tr.appendChild(tdPos);
-        tr.appendChild(tdNome);
-        tr.appendChild(tdQtd);
-        tbody.appendChild(tr);
+          tr.appendChild(tdPos);
+          tr.appendChild(tdNome);
+          tr.appendChild(tdQtd);
+          tbody.appendChild(tr);
 
-        if (index < 3) {
-          const premio = document.createElement('tr');
-          premio.classList.add(`top-${index + 1}`);
-          const tdPremio = document.createElement('td');
-          tdPremio.colSpan = 3;
-          tdPremio.classList.add('premio');
+          if (index < 3) {
+            const premio = document.createElement('tr');
+            premio.classList.add('premio');
+            const tdPremio = document.createElement('td');
+            tdPremio.colSpan = 3;
 
-          const premios = [
-            '🏆 1º Lugar: R$ 200 ou 360 adesivos',
-            '🥈 2º Lugar: R$ 100 ou 240 adesivos',
-            '🥉 3º Lugar: R$ 50 ou 120 adesivos'
-          ];
+            const premios = [
+              '🏆 1º Lugar: R$ 200,00 ou 360 adesivos',
+              '🥈 2º Lugar: R$ 100,00 ou 240 adesivos',
+              '🥉 3º Lugar: R$ 50,00 ou 120 adesivos'
+            ];
 
-          tdPremio.innerHTML = `<span class="trophy-icon">${['🏆', '🥈', '🥉'][index]}</span>${premios[index]}`;
-          premio.appendChild(tdPremio);
-          tbody.appendChild(premio);
-        }
+            tdPremio.innerHTML = `<span class="trophy-icon">${['🏆', '🥈', '🥉'][index]}</span>${premios[index]}`;
+            premio.appendChild(tdPremio);
+            tbody.appendChild(premio);
+          }
+        });
+      })
+      .catch(error => {
+        const tbody = document.querySelector('#ranking-table tbody');
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: #ff4444; padding: 2rem;">Erro ao carregar os dados do ranking</td></tr>';
+        document.getElementById('erro').textContent = 'Não foi possível carregar os dados. Tente novamente mais tarde.';
+        console.error('Erro ao carregar ranking:', error);
       });
-    })
-    .catch(error => {
-      const tbody = document.querySelector('#ranking-table tbody');
-      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Erro ao carregar dados.</td></tr>';
-      document.getElementById('erro').textContent = 'Não foi possível carregar os dados. Tente novamente mais tarde.';
-      console.error(error);
-    });
-</script>
+  </script>
 </body>
 </html>
