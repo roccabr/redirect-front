@@ -1,165 +1,128 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ranking EstacionaDireito</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: #000;
-      color: #fff;
-      padding: 2rem;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    header img {
-      max-width: 150px;
-      margin-bottom: 1rem;
-    }
-    header h1 {
-      font-size: 2rem;
-      margin: 0;
-      color: #FBB034;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #1c1c1c;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #333;
-      text-align: left;
-    }
-    th {
-      background-color: #ED1C24;
-      color: #fff;
-    }
-    tr:hover {
-      background-color: #292929;
-    }
-    .top-1 { background-color: #FBB034; color: #000; font-weight: bold; }
-    .top-2 { background-color: #d0a031; color: #000; font-weight: bold; }
-    .top-3 { background-color: #b9913d; color: #000; font-weight: bold; }
-    .premio {
-      font-size: 0.9rem;
-      color: #FBB034;
-    }
-    a {
-      color: #FBB034;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    #erro {
-      color: red;
-      margin-top: 1rem;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <img src="https://arquivos.estacionadireito.com.br/logo.png" alt="EstacionaDireito Logo">
-    <h1>Ranking de Pedidos</h1>
-  </header>
-
-  <table id="ranking-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Pedido</th>
-        <th>Qtd. Vídeos</th>
-        <th>Link</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="4" style="text-align:center">Carregando...</td></tr>
-    </tbody>
-  </table>
-
-  <p id="erro"></p>
-
-  <script>
-    fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
-      .then(response => {
-        if (!response.ok) throw new Error('Erro na resposta da API');
-        return response.json();
-      })
-      .then(data => {
-        const tbody = document.querySelector('#ranking-table tbody');
-        tbody.innerHTML = '';
-
-        data.sort((a, b) => b.qtd_videos - a.qtd_videos);
-
-        data.forEach((item, index) => {
-          const tr = document.createElement('tr');
-
-          if (index === 0) {
-            tr.classList.add('top-1');
-          } else if (index === 1) {
-            tr.classList.add('top-2');
-          } else if (index === 2) {
-            tr.classList.add('top-3');
-          }
-
-          const tdPos = document.createElement('td');
-          tdPos.textContent = index + 1;
-
-          const tdNome = document.createElement('td');
-          tdNome.innerHTML = item.nome;
-
-          const tdQtd = document.createElement('td');
-          tdQtd.textContent = item.qtd_videos;
-
-          const tdLink = document.createElement('td');
-          const a = document.createElement('a');
-          a.href = item.link;
-          a.textContent = 'Abrir';
-          a.target = '_blank';
-          tdLink.appendChild(a);
-
-          tr.appendChild(tdPos);
-          tr.appendChild(tdNome);
-          tr.appendChild(tdQtd);
-          tr.appendChild(tdLink);
-
-          tbody.appendChild(tr);
-
-          if (index < 3) {
-            const premio = document.createElement('tr');
-            premio.classList.add(`top-${index + 1}`);
-            const tdPremio = document.createElement('td');
-            tdPremio.colSpan = 4;
-            tdPremio.classList.add('premio');
-            tdPremio.style.textAlign = 'center';
-
-            const premios = [
-              '🏆 Prêmio: R$200 ou 360 adesivos',
-              '🥈 Prêmio: R$100 ou 240 adesivos',
-              '🥉 Prêmio: R$50 ou 120 adesivos'
-            ];
-
-            tdPremio.textContent = premios[index];
-            premio.appendChild(tdPremio);
-            tbody.appendChild(premio);
-          }
-        });
-      })
-      .catch(error => {
-        document.getElementById('erro').textContent = 'Erro ao carregar os dados.';
-        console.error('Erro ao carregar ranking:', error);
-      });
-  </script>
-</body>
-</html>
+R">
+<title>Ranking EstacionaDireito
+body {
+margin: 0;
+font-family: 'Roboto', sans-serif;
+background-color: #000;
+color: #fff;
+padding: 2rem;
+}
+header {
+text-align: center;
+margin-bottom: 2rem;
+}
+header img {
+max-width: 150px;
+margin-bottom: 1rem;
+}
+header h1 {
+font-size: 2rem;
+margin: 0;
+color: #FBB034;
+}
+table {
+width: 100%;
+border-collapse: collapse;
+background-color: #1c1c1c;
+border-radius: 10px;
+overflow: hidden;
+}
+th, td {
+padding: 1rem;
+border-bottom: 1px solid #333;
+text-align: left;
+}
+th {
+background-color: #ED1C24;
+color: #fff;
+}
+tr:hover {
+background-color: #292929;
+}
+.top-1 { background-color: #FBB034; color: #000; font-weight: bold; }
+.top-2 { background-color: #d0a031; color: #000; font-weight: bold; }
+.top-3 { background-color: #b9913d; color: #000; font-weight: bold; }
+.premio {
+font-size: 0.9rem;
+color: #FBB034;
+}
+a {
+color: #FBB034;
+text-decoration: none;
+}
+a:hover {
+text-decoration: underline;
+}
+#erro {
+color: red;
+margin-top: 1rem;
+text-align: center;
+}
+</style>
+<header>
+Ranking de Pedidos
+<th>#<th>Pedido<th>Qtd. Vídeos<th>Link
+<td colspan="4" style="text-align:center">Carregando...
+fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
+.then(response => {
+if (!response.ok) throw new Error('Erro na resposta da API');
+return response.json();
+})
+.then(data => {
+const tbody = document.querySelector('#ranking-table tbody');
+tbody.innerHTML = '';
+// Ordena por quantidade de vídeos em ordem decrescente
+data.sort((a, b) => b.qtd_videos - a.qtd_videos);
+data.forEach((item, index) => {
+const tr = document.createElement('tr');
+// Estilos para os primeiros 3 lugares
+if (index === 0) {
+tr.classList.add('top-1');
+} else if (index === 1) {
+tr.classList.add('top-2');
+} else if (index === 2) {
+tr.classList.add('top-3');
+}
+// Criação das células da linha
+const tdPos = document.createElement('td');
+tdPos.textContent = index + 1;
+const tdNome = document.createElement('td');
+tdNome.innerHTML = item.nome;
+const tdQtd = document.createElement('td');
+tdQtd.textContent = item.qtd_videos;
+const tdLink = document.createElement('td');
+const a = document.createElement('a');
+a.href = item.link;
+a.textContent = 'Abrir';
+a.target = '_blank';
+tdLink.appendChild(a);
+// Anexa as células à linha
+tr.appendChild(tdPos);
+tr.appendChild(tdNome);
+tr.appendChild(tdQtd);
+tr.appendChild(tdLink);
+tbody.appendChild(tr);
+// Exibição de prêmios
+if (index < 3) {
+const premio = document.createElement('tr');
+premio.classList.add(top-${index + 1});
+const tdPremio = document.createElement('td');
+tdPremio.colSpan = 4;
+tdPremio.classList.add('premio');
+tdPremio.style.textAlign = 'center';
+const premios = [
+'🏆 Prêmio: R$200 ou 360 adesivos',
+'🥈 Prêmio: R$100 ou 240 adesivos',
+'🥉 Prêmio: R$50 ou 120 adesivos'
+];
+tdPremio.textContent = premios[index];
+premio.appendChild(tdPremio);
+tbody.appendChild(premio);
+}
+});
+})
+.catch(error => {
+document.getElementById('erro').textContent = 'Erro ao carregar os dados.';
+console.error('Erro ao carregar ranking:', error);
+});
+</script>
