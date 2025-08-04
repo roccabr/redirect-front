@@ -105,68 +105,70 @@
 
   <p id="erro"></p>
 
-  <script>
-    fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
-      .then(response => {
-        if (!response.ok) throw new Error('Erro na resposta da API');
-        return response.json();
-      })
-      .then(data => {
-        const tbody = document.querySelector('#ranking-table tbody');
-        tbody.innerHTML = '';
+ <script>
+  fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
+    .then(response => {
+      if (!response.ok) throw new Error('Erro na resposta da API');
+      return response.json();
+    })
+    .then(data => {
+      const tbody = document.querySelector('#ranking-table tbody');
+      tbody.innerHTML = '';
 
-        const rankingArray = Object.entries(data).map(([pedido, qtd_videos]) => ({
-          pedido,
-          qtd_videos: Number(qtd_videos)
-        }));
+      // Garante que qtd_videos seja número e ordena
+      const rankingArray = data.map(item => ({
+        nome: item.nome,
+        qtd_videos: Number(item.qtd_videos) || 0
+      })).sort((a, b) => b.qtd_videos - a.qtd_videos);
 
-        rankingArray.sort((a, b) => b.qtd_videos - a.qtd_videos);
+      rankingArray.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        if (index === 0) tr.classList.add('top-1');
+        if (index === 1) tr.classList.add('top-2');
+        if (index === 2) tr.classList.add('top-3');
 
-        rankingArray.forEach((item, index) => {
-          const tr = document.createElement('tr');
+        const tdPos = document.createElement('td');
+        tdPos.classList.add('position-cell');
+        tdPos.textContent = index + 1;
 
-          if (index === 0) tr.classList.add('top-1');
-          if (index === 1) tr.classList.add('top-2');
-          if (index === 2) tr.classList.add('top-3');
+        const tdNome = document.createElement('td');
+        tdNome.classList.add('name-cell');
+        tdNome.textContent = item.nome;
 
-          const tdPos = document.createElement('td');
-          tdPos.classList.add('position-cell');
-          tdPos.textContent = index + 1;
+        const tdQtd = document.createElement('td');
+        tdQtd.classList.add('videos-cell');
+        tdQtd.textContent = item.qtd_videos;
 
-          const tdPedido = document.createElement('td');
-          tdPedido.textContent = item.pedido;
+        tr.appendChild(tdPos);
+        tr.appendChild(tdNome);
+        tr.appendChild(tdQtd);
+        tbody.appendChild(tr);
 
-          const tdQtd = document.createElement('td');
-          tdQtd.classList.add('videos-cell');
-          tdQtd.textContent = item.qtd_videos;
+        if (index < 3) {
+          const premio = document.createElement('tr');
+          premio.classList.add(`top-${index + 1}`);
+          const tdPremio = document.createElement('td');
+          tdPremio.colSpan = 3;
+          tdPremio.classList.add('premio');
 
-          tr.appendChild(tdPos);
-          tr.appendChild(tdPedido);
-          tr.appendChild(tdQtd);
-          tbody.appendChild(tr);
+          const premios = [
+            '🏆 1º Lugar: R$ 200 ou 360 adesivos',
+            '🥈 2º Lugar: R$ 100 ou 240 adesivos',
+            '🥉 3º Lugar: R$ 50 ou 120 adesivos'
+          ];
 
-          // Linha de prêmio para o top 3
-          if (index < 3) {
-            const premio = document.createElement('tr');
-            const tdPremio = document.createElement('td');
-            tdPremio.colSpan = 3;
-            tdPremio.classList.add('premio');
-            const premios = [
-              '🏆 1º Lugar: R$ 200 ou 360 adesivos',
-              '🥈 2º Lugar: R$ 100 ou 240 adesivos',
-              '🥉 3º Lugar: R$ 50 ou 120 adesivos'
-            ];
-            tdPremio.textContent = premios[index];
-            premio.appendChild(tdPremio);
-            tbody.appendChild(premio);
-          }
-        });
-      })
-      .catch(error => {
-        document.querySelector('#ranking-table tbody').innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Erro ao carregar dados.</td></tr>';
-        document.getElementById('erro').textContent = 'Não foi possível carregar os dados. Tente novamente mais tarde.';
-        console.error(error);
+          tdPremio.innerHTML = `<span class="trophy-icon">${['🏆', '🥈', '🥉'][index]}</span>${premios[index]}`;
+          premio.appendChild(tdPremio);
+          tbody.appendChild(premio);
+        }
       });
-  </script>
+    })
+    .catch(error => {
+      const tbody = document.querySelector('#ranking-table tbody');
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Erro ao carregar dados.</td></tr>';
+      document.getElementById('erro').textContent = 'Não foi possível carregar os dados. Tente novamente mais tarde.';
+      console.error(error);
+    });
+</script>
 </body>
 </html>
