@@ -53,17 +53,23 @@
   </table>
 
   <script>
-    fetch('/api/ranking')
+    fetch('https://arquivos.estacionadireito.com.br/api/ranking')
       .then(response => response.json())
       .then(data => {
         const tbody = document.querySelector("#ranking tbody");
-        data.forEach((item, index) => {
+        let index = 1;
+
+        // Converte o objeto em array e ordena pela quantidade de vídeos (decrescente)
+        const sorted = Object.entries(data)
+          .sort(([, a], [, b]) => b - a);
+
+        sorted.forEach(([pedido, qtd_videos]) => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${item.nome}</td>
-            <td>${item.qtd_videos}</td>
-            <td><a href="${item.link}" target="_blank">Acessar</a></td>
+            <td>${index++}</td>
+            <td>${pedido}</td>
+            <td>${qtd_videos}</td>
+            <td><a href="/${pedido}" target="_blank">Acessar</a></td>
           `;
           tbody.appendChild(tr);
         });
