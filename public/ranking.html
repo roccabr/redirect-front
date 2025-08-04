@@ -20,7 +20,7 @@
   <p id="erro" style="color:red;"></p>
 
   <script>
-    fetch("https://arquivos.estacionadireito.com.br/api/ranking")
+    fetch("https://arquivos.estacionadireito.com.br/api/ranking.js")
       .then(response => {
         if (!response.ok) {
           throw new Error('Erro na resposta da API');
