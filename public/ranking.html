@@ -1,56 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ranking Simples</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-    th {
-      background-color: #eee;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Ranking de Pedidos</title>
 </head>
 <body>
   <h1>Ranking de Pedidos</h1>
-  <table>
+  <table border="1" id="ranking-table">
     <thead>
       <tr>
         <th>Pedido</th>
-        <th>Qtd de vídeos</th>
+        <th>Qtd. Vídeos</th>
+        <th>Link</th>
       </tr>
     </thead>
-    <tbody id="ranking"></tbody>
+    <tbody></tbody>
   </table>
+
+  <p id="erro" style="color:red;"></p>
 
   <script>
     fetch("https://arquivos.estacionadireito.com.br/api/ranking")
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na resposta da API');
+        }
+        return response.json();
+      })
       .then(data => {
-        const tbody = document.getElementById("ranking");
-        const sorted = Object.entries(data).sort(([, a], [, b]) => b - a);
-        sorted.forEach(([pedido, qtd]) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `<td>${pedido}</td><td>${qtd}</td>`;
-          tbody.appendChild(row);
+        const tbody = document.querySelector('#ranking-table tbody');
+        tbody.innerHTML = ''; // limpa antes de preencher
+
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+
+          const tdNome = document.createElement('td');
+          tdNome.textContent = item.nome;
+
+          const tdQtd = document.createElement('td');
+          tdQtd.textContent = item.qtd_videos;
+
+          const tdLink = document.createElement('td');
+          const a = document.createElement('a');
+          a.href = item.link;
+          a.textContent = 'Abrir';
+          a.target = '_blank';
+          tdLink.appendChild(a);
+
+          tr.appendChild(tdNome);
+          tr.appendChild(tdQtd);
+          tr.appendChild(tdLink);
+
+          tbody.appendChild(tr);
         });
       })
-      .catch(err => {
-        document.body.innerHTML = "<p>Erro ao carregar os dados.</p>";
-        console.error(err);
+      .catch(error => {
+        document.getElementById('erro').textContent = 'Erro ao carregar os dados.';
+        console.error('Erro ao carregar ranking:', error);
       });
   </script>
 </body>
 </html>
+
