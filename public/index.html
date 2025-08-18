@@ -362,7 +362,7 @@
     event.preventDefault();
     const codigo = document.getElementById('codigoPedido').value.trim();
     if (codigo) {
-      const url = `https://arquivos.estacionadireito.com.br/pedido-${codigo}`;
+      const url = `https://arquivos.estacionadireito.com.br/${codigo}`;
       window.open(url, '_blank');
     }
   }
